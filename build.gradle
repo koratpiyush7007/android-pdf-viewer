@@ -1,0 +1,89 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.5.2"
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+android {
+    namespace 'com.github.barteksc.pdfviewer'
+    compileSdkVersion 36
+
+    defaultConfig {
+        minSdkVersion 28
+        targetSdkVersion 36
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'com.github.koratpiyush7007:PdfiumAndroid:v1.2'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.github.koratpiyush7007"
+            artifactId = "android-pdf-viewer"
+            version = "1.0.0"
+
+            // Manually point to the AAR file
+            afterEvaluate {
+                artifact("$buildDir/outputs/aar/android-pdf-viewer-release.aar")
+            }
+        }
+    }
+}
+
+
+//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+/*apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.github.barteksc.pdfviewer'
+    compileSdkVersion 36
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 36
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation(libs.androidx.appcompat)
+    implementation libs.material
+    implementation (libs.androidx.constraintlayout)
+    implementation project(':PdfiumAndroid')
+}*/
